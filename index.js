@@ -153,30 +153,36 @@ class Tree {
     }
   }
 
-  processNode(node) {
-    console.log(node);
+  processNode(node, values) {
+    values.push(node.data);
   }
 
   levelOrderRecursive(
     node = this.root,
     queue = [node],
+    values = [],
     processNode = this.processNode
   ) {
     if (node === null) return;
-    processNode(node);
+    processNode(node, values);
     queue.push(node.left, node.right);
     queue.shift();
-    this.levelOrderRecursive(queue[0], queue, this.processNode);
+    this.levelOrderRecursive(queue[0], queue, values, this.processNode);
+    return values;
   }
 
-  levelOrderIterative(queue = [this.root], processNode = this.processNode) {
+  levelOrderIterative(
+    queue = [this.root],
+    values = [],
+    processNode = this.processNode
+  ) {
     while (queue.length > 0) {
-      processNode(queue[0]);
+      processNode(queue[0], values);
       if (queue[0].left != null) queue.push(queue[0].left);
       if (queue[0].right != null) queue.push(queue[0].right);
       queue.shift();
     }
-    return queue;
+    return values;
   }
 }
 
