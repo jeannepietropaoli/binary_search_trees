@@ -211,6 +211,16 @@ class Tree {
     processNode(root, values);
     return values;
   }
+
+  height(node = this.root) {
+    if (node === null) return 0;
+    if (node.left === null && node.right === null) return 0;
+    let heightOfLeft = 0;
+    let heightOfRight = 0;
+    if (node.left != null) heightOfLeft = 1 + this.height(node.left);
+    if (node.right != null) heightOfRight = 1 + this.height(node.right);
+    return heightOfLeft > heightOfRight ? heightOfLeft : heightOfRight;
+  }
 }
 
 const arr = [5, 3, 2, 1, 4, 8, 7, 9, 6];
