@@ -158,23 +158,23 @@ class Tree {
   }
 
   levelOrderRecursive(
+    processNode = this.processNode,
     node = this.root,
     queue = [node],
-    values = [],
-    processNode = this.processNode
+    values = []
   ) {
     if (node === null) return;
     processNode(node, values);
     queue.push(node.left, node.right);
     queue.shift();
-    this.levelOrderRecursive(queue[0], queue, values, this.processNode);
+    this.levelOrderRecursive(processNode, queue[0], queue, values);
     return values;
   }
 
   levelOrderIterative(
+    processNode = this.processNode,
     queue = [this.root],
-    values = [],
-    processNode = this.processNode
+    values = []
   ) {
     while (queue.length > 0) {
       processNode(queue[0], values);
@@ -184,8 +184,35 @@ class Tree {
     }
     return values;
   }
+
+  // <left> <root> <right>
+  inorder(processNode = this.processNode, root = this.root, values = []) {
+    if (root === null) return;
+    this.inorder(processNode, root.left, values);
+    processNode(root, values);
+    this.inorder(processNode, root.right, values);
+    return values;
+  }
+
+  // <root> <left> <right>
+  preorder(processNode = this.processNode, root = this.root, values = []) {
+    if (root === null) return;
+    processNode(root, values);
+    this.preorder(processNode, root.left, values);
+    this.preorder(processNode, root.right, values);
+    return values;
+  }
+
+  // <left> <right> <root>
+  postorder(processNode = this.processNode, root = this.root, values = []) {
+    if (root === null) return;
+    this.postorder(processNode, root.left, values);
+    this.postorder(processNode, root.right, values);
+    processNode(root, values);
+    return values;
+  }
 }
 
-const arr = [1, 2, 3, 4, 8, 9, 11];
+const arr = [5, 3, 2, 1, 4, 8, 7, 9, 6];
 const tree = new Tree(arr);
 tree.prettyPrint();
