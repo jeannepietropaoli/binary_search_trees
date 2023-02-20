@@ -152,6 +152,32 @@ class Tree {
       node.data = replacementData;
     }
   }
+
+  processNode(node) {
+    console.log(node);
+  }
+
+  levelOrderRecursive(
+    node = this.root,
+    queue = [node],
+    processNode = this.processNode
+  ) {
+    if (node === null) return;
+    processNode(node);
+    queue.push(node.left, node.right);
+    queue.shift();
+    this.levelOrderRecursive(queue[0], queue, this.processNode);
+  }
+
+  levelOrderIterative(queue = [this.root], processNode = this.processNode) {
+    while (queue.length > 0) {
+      processNode(queue[0]);
+      if (queue[0].left != null) queue.push(queue[0].left);
+      if (queue[0].right != null) queue.push(queue[0].right);
+      queue.shift();
+    }
+    return queue;
+  }
 }
 
 const arr = [1, 2, 3, 4, 8, 9, 11];
