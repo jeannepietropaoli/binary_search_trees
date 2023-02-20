@@ -221,6 +221,12 @@ class Tree {
     if (node.right != null) heightOfRight = 1 + this.height(node.right);
     return heightOfLeft > heightOfRight ? heightOfLeft : heightOfRight;
   }
+
+  depth(node, count = 1) {
+    if (node === this.root) return 0;
+    if (this.parentNode(node) === this.root) return count;
+    return this.depth(this.parentNode(node), ++count);
+  }
 }
 
 const arr = [5, 3, 2, 1, 4, 8, 7, 9, 6];
