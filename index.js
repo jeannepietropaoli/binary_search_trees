@@ -105,8 +105,55 @@ class Tree {
       }
     }
   }
+
+  find(value, node = this.root) {
+    if (node === null) return undefined;
+    if (node.data === value) return node;
+    return node.data > value
+      ? this.find(value, node.left)
+      : this.find(value, node.right);
+  }
+
+  countChild(node) {
+    if (node.left === null && node.right === null) return 0;
+    if (node.left === null || node.right === null) return 1;
+    return 2;
+  }
+
+  parentNode(child, node = this.root) {
+    if ((node.left === null && node.right === null) || child === this.root)
+      return undefined;
+    if (node.left === child || node.right === child) return node;
+    return node.data > child.data
+      ? this.parentNode(child, node.left)
+      : this.parentNode(child, node.right);
+  }
+
+  findTheSmallestOfTheHighest(node, start = node.right) {
+    if (start.left === null) return start;
+    return this.findTheSmallestOfTheHighest(node, start.left);
+  }
+
+  delete(value) {
+    const node = this.find(value);
+    const parent = this.parentNode(node);
+    if (this.countChild(node) === 0)
+      parent.data > node.data ? (parent.left = null) : (parent.right = null);
+    else if (this.countChild(node) === 1) {
+      let newChild;
+      node.left === null ? (newChild = node.right) : (newChild = node.left);
+      parent.data > newChild.data
+        ? (parent.left = newChild)
+        : (parent.right = newChild);
+    } else {
+      const replacementNode = this.findTheSmallestOfTheHighest(node);
+      const replacementData = replacementNode.data;
+      this.delete(replacementData);
+      node.data = replacementData;
+    }
+  }
 }
 
-const arr = [1, 2, 3, 4];
+const arr = [1, 2, 3, 4, 8, 9, 11];
 const tree = new Tree(arr);
 tree.prettyPrint();
